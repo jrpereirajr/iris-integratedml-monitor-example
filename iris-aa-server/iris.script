@@ -1,0 +1,18 @@
+zn "%SYS"
+w ##class(Security.Users).UnExpireUserPasswords("*")
+
+zn "USER"
+zpm "install sslclient"
+zpm "install csvgen"
+zpm "install webterminal"
+
+do $system.OBJ.LoadDir("/data/src","cuk",,1)
+
+w ##class(Util.Loader).Load("/data/breast-cancer.csv","User.BreastCancer")
+
+w ##class(Util.Loader).Load("/data/Campaign.csv","User.Campaign",";")
+
+do ##class(community.csvgen).Generate("/data/titanic.csv",",","User.Passengers")
+do ##class(community.csvgen).GenerateFromURL("https://raw.githubusercontent.com/datasciencedojo/datasets/master/WorldDBTables/CountryTable.csv",",","User.Countries")
+
+halt
