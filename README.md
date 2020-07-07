@@ -7,7 +7,7 @@ This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML mod
 (todo:)
 * [What is IntegratedML?](#what-is-integratedml)
 * [What's IRIS System Monitor](#whats-iris-system-monitor)
-* [Data and ML Application detalis(#data-and-ml-application-detalis)
+* [Data and ML Application detalis](#data-and-ml-application-detalis)
 * [Topology](#topology)
 * [Prerequisites](#prerequisites)
 * [Tested environments](#tested-environments)
