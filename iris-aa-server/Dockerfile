@@ -11,7 +11,9 @@ USER irisowner
 # copy files
 COPY data /data
 COPY src /data/src
+COPY src-post-install /data/src-post-install
 COPY iris.script /tmp/iris.script
+COPY irisnative-1.2.0-cp34-abi3-linux_x86_64.whl /tmp/irisnative-1.2.0-cp34-abi3-linux_x86_64.whl
 
 # special extract treatment for hate-speech dataset
 # RUN mkdir /data/hate-speech/ \

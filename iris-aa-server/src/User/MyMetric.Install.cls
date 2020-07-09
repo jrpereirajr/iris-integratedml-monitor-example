@@ -27,9 +27,10 @@ ClassMethod Uninstall(pClassName As %String)
 	Do inst.RestartMonitor()
 }
 
-Method RestartMonitor()
+ClassMethod RestartMonitor()
 {
 	Do STOP^%SYSMONMGR
+	Write !,"Wating 5 seconds to start monitor..."
 	Hang 5
 	Do START^%SYSMONMGR
 }
@@ -68,10 +69,27 @@ End
 
 ClassMethod Test(pClassName As %String)
 {
-	set mclass=pClassName
-	set col=##class(%Monitor.SampleAgent).%New(mclass)
-	write col.Collect()
-	write ##class(%Monitor.View).Display(mclass)
+	Set mclass=pClassName
+	Set col=##class(%Monitor.SampleAgent).%New(mclass)
+	Do col.Collect()
+	
+	Set dev = "/tmp/"_$HOROLOG_".txt"
+	OPEN dev:("ARW"):5
+	USE dev
+	$$$THROWONERROR(st, ##class(%Monitor.View).Display(mclass))
+	CLOSE dev
+	
+	Set f = ##class(%File).%New(dev)
+	Do f.Open()
+	Set log = f.Read()
+	While 'f.AtEnd { 
+		Set log = log_f.ReadLine()_$C(13,10)
+	}
+	Do f.Close()
+	
+	Do f.Delete(dev)
+	
+	Return log
 }
 
 }

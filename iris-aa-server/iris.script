@@ -17,4 +17,6 @@ w ##class(Util.Loader).Load("/data/medical-appointments.csv","User.MedicalAppoin
 do ##class(community.csvgen).Generate("/data/titanic.csv",",","User.Passengers")
 do ##class(community.csvgen).GenerateFromURL("https://raw.githubusercontent.com/datasciencedojo/datasets/master/WorldDBTables/CountryTable.csv",",","User.Countries")
 
+d ##class(MyMetric.Install).Install("MyMetric.IntegratedMLModelsValidation", "/data/src-post-install/MyMetric.IntegratedMLModelsValidation.cls")
+
 halt
