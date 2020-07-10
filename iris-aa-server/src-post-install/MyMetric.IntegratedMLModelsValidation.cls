@@ -30,7 +30,6 @@ Property Rspec As %SQL.StatementResult [ Internal ];
 /// Initialize the list of models validation metrics.
 Method Initialize() As %Status
 {
-	/*
 	Set sql = 
 	"SELECT MODEL_NAME, TRAINED_MODEL_NAME, STATUS_CODE, %DLIST(pair) AS METRICS_LIST FROM ("_
 		"SELECT m.*, $LISTBUILD(m.METRIC_NAME, m.METRIC_VALUE) pair, r.STATUS_CODE "_
@@ -46,26 +45,6 @@ Method Initialize() As %Status
 		"HAVING m.VALIDATION_RUN_NAME = MAX(m.VALIDATION_RUN_NAME)"_
 	") "_
 	"GROUP BY MODEL_NAME"
-	*/
-	set sql =
-	"select MODEL_NAME, TRAINED_MODEL_NAME, STATUS_CODE, %DLIST(pair) METRICS_LIST from ( "_
-	"SELECT 'model1' MODEL_NAME, 'trained_model1' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('PRECISION', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model1' MODEL_NAME, 'trained_model1' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('RECALL', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model1' MODEL_NAME, 'trained_model1' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('F-MEASURE', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model1' MODEL_NAME, 'trained_model1' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('ACCURACY', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model2' MODEL_NAME, 'trained_model2' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('PRECISION', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model2' MODEL_NAME, 'trained_model2' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('RECALL', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model2' MODEL_NAME, 'trained_model2' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('F-MEASURE', "_($Random(1000)/1000)_") pair "_
-	"union "_
-	"SELECT 'model2' MODEL_NAME, 'trained_model2' TRAINED_MODEL_NAME, 1 STATUS_CODE, $LISTBUILD('ACCURACY', "_($Random(1000)/1000)_") pair "_
-	") "_
-	"group by MODEL_NAME "
     Set stmt = ##class(%SQL.Statement).%New()
     $$$THROWONERROR(status, stmt.%Prepare(sql))
     Set ..Rspec = stmt.%Execute()
