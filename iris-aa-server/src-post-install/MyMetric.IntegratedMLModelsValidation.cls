@@ -30,6 +30,8 @@ Property Rspec As %SQL.StatementResult [ Internal ];
 /// Initialize the list of models validation metrics.
 Method Initialize() As %Status
 {
+	// todo: change this sql to doesn't filter by date, but instead aggregate by timestamp
+	// Get the latest validation for each model validated by VALIDATION MODEL statement
 	Set sql = 
 	"SELECT MODEL_NAME, TRAINED_MODEL_NAME, STATUS_CODE, %DLIST(pair) AS METRICS_LIST FROM ("_
 		"SELECT m.*, $LISTBUILD(m.METRIC_NAME, m.METRIC_VALUE) pair, r.STATUS_CODE "_
@@ -82,6 +84,11 @@ Method GetSample() As %Status
 
     // quit with return value indicating the sample data is ready
     Return $$$OK
+}
+
+ClassMethod Setup()
+{
+	Do ##class(MyMetric.Install).Install("MyMetric.IntegratedMLModelsValidation", "/data/src-post-install/MyMetric.IntegratedMLModelsValidation.cls")
 }
 
 }
