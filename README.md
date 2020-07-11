@@ -21,7 +21,7 @@ However, this isn't the whole story. Your deployed models need to be periodicall
 
 Fortunately, IRIS also provides tools for system monitoring - called IRIS System Monitor.
 
-In this work, an user-defined application monitor will be written in order to monitor IntegrateML models performance.
+In this work, an user-defined application monitor will be written in order to monitor IntegrateML models performance. Please, check [this out](http://localhost:8896/notebooks/IntegeratedML-Monitor-Example.ipynb) to see how you can do it.
 
 ## What is IntegratedML?
 <small>Note: took exactaly as described in [here](https://openexchange.intersystems.com/package/integratedml-demo-template)</small>
