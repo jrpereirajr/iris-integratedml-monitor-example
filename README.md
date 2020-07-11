@@ -1,22 +1,31 @@
 # iris-integratedml-monitor-example
-This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML models performance metrics, based on template for IntegratedML - InterSystems Github repository (https://github.com/tom-dyar/integratedml-demo-template).
+This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML models performance metrics, based on template for IntegratedML.
 
-# Note: under development...
-
-(todo:)
+# *Notice: under development...*
 
 ## Contents
-(todo:)
+
+* [Monitoring your models](#monitoring-your-models)
 * [What is IntegratedML?](#what-is-integratedml)
 * [What's IRIS System Monitor](#whats-iris-system-monitor)
-* [Data and ML Application detalis](#data-and-ml-application-detalis)
-* [Topology](#topology)
+* [Data detalis](#data-detalis)
 * [Prerequisites](#prerequisites)
 * [Tested environments](#tested-environments)
 * [Installation](#installation)
 
+## Monitoring your models
+
+One of the best features of IRIS IntegrateML is its easy deployment. I mean, if you have an IRIS database, technically you're all set to start your machine learning (ML) model, based on the most used tools available today. And once your database is deployed, your ML model are deployed automatically.
+
+However, this isn't the whole story. Your deployed models need to be periodically monitored to ensure their reliability. If their performance becomes unacceptable, they need to be retrained.
+
+Fortunately, IRIS also provides tools for system monitoring - called IRIS System Monitor.
+
+In this work, an user-defined application monitor will be written in order to monitor IntegrateML models performance.
+
 ## What is IntegratedML?
-(todo:)
+<small>Note: took exactaly as described in [here](https://openexchange.intersystems.com/package/integratedml-demo-template)</small>
+
 IntegratedML is a feature of the InterSystems IRIS data platform that brings machine learning to SQL developers.
 <p align="center">
   <img src="https://user-images.githubusercontent.com/8899513/85149599-7848f900-b21f-11ea-9b65-b5d703752de3.PNG" width="600" title="docker environment topology after installation">
@@ -30,28 +39,26 @@ IntegratedML is
 Learn more about InterSystems IRIS and IntegratedML at the [InterSystems Learning site](https://learning.intersystems.com/course/view.php?name=Learn%20IntegratedML)
 
 ## What's IRIS System Monitor
-(todo:)
 
-## Data and ML Application detalis
-(todo:)
-Data origin: https://www.kaggle.com/afflores/medical-appointment#
+InterSystems IRIS provides the System Monitor framework to provide monitoring task on system metrics and trigger notifications based on predicates applied on such metrics. System Monitor also let you to extend built-in monitors to cover a endless possibilities.
 
+You can get more information on System Monitor [here](https://irisdocs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=GCM_healthmon).
 
-## Topology
-(todo:)
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/8899513/85151307-a0d1f280-b221-11ea-81d8-f0e11ca45d4c.PNG" width="600" title="docker environment topology after installation">
-</p>
+## Data detalis
+
+In this work an open dataset with +60K medical appointments is used to train a show/no-show prediction model and simulate a performance issue which can be detected by an application monitor.
+
+The dataset was grabbed from [Kaggle platform](https://www.kaggle.com/) and more information about this dataset could be acquired [here](https://www.kaggle.com/afflores/medical-appointment#).
 
 ## Prerequisites
-(todo:)
+
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
 
 ## Tested environments
-(todo:)
+
+This example was tested on Windows 10 and Docker 2.1.
 
 ## Installation
-(todo:)
 
 Clone/git pull the repo into any local directory
 
@@ -65,23 +72,22 @@ Open a Docker terminal in this directory and run:
 $ docker-compose build
 ```
 
-3. Run the IRIS container, and Jupyter notebook server images:
+Run the IRIS container, and Jupyter notebook server images:
 
 ```
 $ docker-compose up -d
 ```
 
-4. Open browser to access the notebooks
+Start monitor on USER namespace
 
 ```
-http://localhost:8896/tree
+docker exec iris-integratedml-monitor-example_irisimlsvr_1 iris session IRIS -U USER '##class(MyMetric.IntegratedMLModelsValidation).Setup()'
+```
+
+Open browser to access the example notebook
+
+```
+http://localhost:8896/notebooks/IntegeratedML-Monitor-Example.ipynb
 ```
 Note: use `docker-compose ps` to confirm tf2juyter's ports; make sure right localhost port is used if over SSL tunneling to remotehost)
 
-5. Examine the test data with webterminal
-Open terminal with: SuperUser / SYS credentials
-```
-http://localhost:8092/terminal/
-```
-Enter **/sql** mode and make SQL queries to examine data in IRIS.
-![](https://user-images.githubusercontent.com/8899513/85151564-edb5c900-b221-11ea-96d4-1833a93c47eb.png?raw=true)
