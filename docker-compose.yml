@@ -13,6 +13,7 @@ services:
     - 8092:52773 # 52773 is the webserver/management portal port
     volumes:
     - ./iris-shared:/shared
+    container_name: iris-integratedml-monitor-example_irisimlsvr_1
   tf2jupyter:   # tensorflow with jupyter 
     build:
       context: ./tf2-jupyter-jdbc
