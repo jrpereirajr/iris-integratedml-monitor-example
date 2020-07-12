@@ -13,7 +13,7 @@ This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML mod
 
 ## Monitoring your models
 
-One of the best features of IRIS IntegrateML is its easy deployment. I mean, if you have an IRIS database, technically you're all set to start your machine learning (ML) model, based on the most used tools available today. And once your database is deployed, your ML model are deployed automatically.
+One of the features of IRIS IntegrateML is its easy deployment. I mean, if you have an IRIS database, technically you're all set to start your machine learning (ML) model, based on the most used tools available today. And once your database is deployed, your ML model are deployed automatically.
 
 However, this isn't the whole story. Your deployed models need to be periodically monitored to ensure their reliability. If their performance becomes unacceptable, they need to be retrained.
 
@@ -21,19 +21,19 @@ Fortunately, IRIS also provides tools for system monitoring - called IRIS System
 
 In this work, an user-defined application monitor will be written in order to monitor IntegrateML models performance.
 
-For instance, let's say after you train your model you achieve 90% of accuracy, and you consider this value as the minimum acceptable. The application monitor developed here show us this value, as we can see in the web interface below.
+For instance, let's say after you trained your model you achieve 90% of accuracy, and you consider this value as the minimum acceptable. The application monitor developed here show us this value, as we can see in the below.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jrpereirajr/iris-integratedml-monitor-example/master/model-validation-1.png" width="400" title="docker environment topology after installation">
 </p>
 
-Now, imagine after a while, new records introduce noise into you data in such way that model's performance descrease to 87%. You can setup an alert using application monitor data, defining a rule to trigger it, if accuracy metric is below 90%, and an e-mail is sent to someone who could take some action in order to restore model's performance to an acceptable level.
+Now, imagine after a while, new records introduce noise into your data in such way that model's performance descrease to 87%. You can setup an alert using application monitor data, defining a rule to trigger it, if accuracy metric is below 90%, and an e-mail is sent to someone who could take some action in order to restore model's performance to an acceptable level.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jrpereirajr/iris-integratedml-monitor-example/master/model-validation-2.png" width="600" title="docker environment topology after installation">
 </p>
 
-In e-mail body, you could find information about alert such its name, application monitor and its metrics values that triggered the alert.
+In e-mail body, you could find information about the alert, such its name, application monitor and its metrics values that triggered the alert.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jrpereirajr/iris-integratedml-monitor-example/master/model-validation-3.png" width="600" title="docker environment topology after installation">
