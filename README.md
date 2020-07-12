@@ -88,6 +88,12 @@ Clone/git pull the repo into any local directory
 $ git clone https://github.com/jrpereirajr/iris-integratedml-monitor-example.git
 ```
 
+Go to the new directory
+
+```
+$ cd .\iris-integratedml-monitor-example\
+```
+
 Open a Docker terminal in this directory and run:
 
 ```
