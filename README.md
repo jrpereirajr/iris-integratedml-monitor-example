@@ -48,7 +48,7 @@ $ docker-compose up -d
 ```
 
 Start monitor on USER namespace.  
-If you get an error like 'Sign-on inhibited: Startup or Installation in progress', please, wait until IRIS instance complete its startup.
+**If you get an error like 'Sign-on inhibited: Startup or Installation in progress', please, wait until IRIS instance complete its startup.**
 
 ```
 docker exec iris-integratedml-monitor-example_irisimlsvr_1 iris session IRIS -U USER '##class(MyMetric.IntegratedMLModelsValidation).Setup()'
