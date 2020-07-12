@@ -30,7 +30,6 @@ Property Rspec As %SQL.StatementResult [ Internal ];
 /// Initialize the list of models validation metrics.
 Method Initialize() As %Status
 {
-	// todo: change this sql to doesn't filter by date, but instead aggregate by timestamp
 	// Get the latest validation for each model validated by VALIDATION MODEL statement
 	Set sql = 
 	"SELECT MODEL_NAME, TRAINED_MODEL_NAME, STATUS_CODE, %DLIST(pair) AS METRICS_LIST FROM ("_
@@ -40,11 +39,8 @@ Method Initialize() As %Status
 		"ON m.MODEL_NAME = r.MODEL_NAME "_
 			"AND m.TRAINED_MODEL_NAME = r.TRAINED_MODEL_NAME "_
 			"AND m.VALIDATION_RUN_NAME = r.VALIDATION_RUN_NAME "_
-		"WHERE "_
-			"r.COMPLETED_TIMESTAMP BETWEEN CURRENT_DATE "_
-			"AND DATEADD(D, 1, CURRENT_DATE) "_
 		"GROUP BY m.MODEL_NAME, m.METRIC_NAME "_
-		"HAVING m.VALIDATION_RUN_NAME = MAX(m.VALIDATION_RUN_NAME)"_
+		"HAVING r.COMPLETED_TIMESTAMP = MAX(r.COMPLETED_TIMESTAMP)"_
 	") "_
 	"GROUP BY MODEL_NAME"
     Set stmt = ##class(%SQL.Statement).%New()
@@ -68,7 +64,7 @@ Method GetSample() As %Status
 
     // populate this instance
     Set ..ModelName = ..Rspec.%Get("MODEL_NAME")
-    Set ..ModelTrainedName = ..Rspec.%Get("TRAINED_MODEL_NAME")_$Replace($Replace($NOW(),",",""),".","")
+    Set ..ModelTrainedName = ..Rspec.%Get("TRAINED_MODEL_NAME")_" ["_$zdt($zts,3)_"]"
     Set ..StatusCode = ..Rspec.%Get("STATUS_CODE")
     Set metricsList = ..Rspec.%Get("METRICS_LIST")
     Set len = $LL(metricsList)
