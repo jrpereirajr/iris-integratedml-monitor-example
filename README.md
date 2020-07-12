@@ -21,7 +21,23 @@ However, this isn't the whole story. Your deployed models need to be periodicall
 
 Fortunately, IRIS also provides tools for system monitoring - called IRIS System Monitor.
 
-In this work, an user-defined application monitor will be written in order to monitor IntegrateML models performance. Please, [check this out](http://localhost:8896/notebooks/IntegeratedML-Monitor-Example.ipynb) to see how you can do it.
+In this work, an user-defined application monitor will be written in order to monitor IntegrateML models performance.
+
+For instance, let's say after you train your model you achieve 90% of accuracy, and you consider this value as the minimum acceptable. The application monitor developed here show us this value, as we can see in the web interface below.
+
+<p align="center">
+  <img src="model-validation-1.png" width="600" title="docker environment topology after installation">
+</p>
+
+Now, imagine after a while, new records introduce noise into you data in such way that model's performance descrease to 87%. You can setup an alert using application monitor data, defining a rule to trigger it, if accuracy metric is below 90%, and an e-mail is sent to someone who could take some action in order to restore model's performance to an acceptable level.
+
+<p align="center">
+  <img src="model-validation-2.png" width="600" title="docker environment topology after installation">
+</p>
+
+This scenario is simulated into a notebook provided in this exaple. Please, after proceed with [instalation](#installation), [check this out](http://localhost:8896/notebooks/IntegeratedML-Monitor-Example.ipynb) to see how you can do it.
+
+In the next sections some information is given on tecnologies and data used in this example for context purposes. An instalation guide is provided as well.
 
 ## What is IntegratedML?
 <small>Note: took exactaly as described [here](https://openexchange.intersystems.com/package/integratedml-demo-template)</small>
@@ -54,6 +70,8 @@ The dataset was grabbed from [Kaggle platform](https://www.kaggle.com/) and more
 
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
 
+About 6.5GB of free disk space availble.
+
 ## Tested environments
 
 This example was tested on Windows 10 and Docker 2.1.
@@ -78,7 +96,7 @@ Run the IRIS container, and Jupyter notebook server images:
 $ docker-compose up -d
 ```
 
-Start monitor on USER namespace
+Start monitor on USER namespace. If you have an error mensagem like 'Sign-on inhibited: Startup or Installation in progress', please,, wait until IRIS instance complete its startup.
 
 ```
 docker exec iris-integratedml-monitor-example_irisimlsvr_1 iris session IRIS -U USER '##class(MyMetric.IntegratedMLModelsValidation).Setup()'
