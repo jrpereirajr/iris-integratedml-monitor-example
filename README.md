@@ -3,13 +3,63 @@ This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML mod
 
 ## Contents
 
+* [Prerequisites](#prerequisites)
+* [Tested environments](#tested-environments)
+* [Installation](#installation)
 * [Monitoring your models](#monitoring-your-models)
 * [What is IntegratedML?](#what-is-integratedml)
 * [What's IRIS System Monitor](#whats-iris-system-monitor)
 * [Data detalis](#data-detalis)
-* [Prerequisites](#prerequisites)
-* [Tested environments](#tested-environments)
-* [Installation](#installation)
+
+## Prerequisites
+
+Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
+
+About 6.5GB of free disk space availble.
+
+## Tested environments
+
+This example was tested on Windows 10 and Docker 2.1. All commands was ran in Windows PowerShell.
+
+## Installation
+
+Clone/git pull the repo into any local directory
+
+```
+$ git clone https://github.com/jrpereirajr/iris-integratedml-monitor-example.git
+```
+
+Go to the new directory
+
+```
+$ cd .\iris-integratedml-monitor-example\
+```
+
+Open a Docker terminal in this directory and run:
+
+```
+$ docker-compose build
+```
+
+Run the IRIS container, and Jupyter notebook server images:
+
+```
+$ docker-compose up -d
+```
+
+Start monitor on USER namespace.  
+If you get an error like 'Sign-on inhibited: Startup or Installation in progress', please, wait until IRIS instance complete its startup.
+
+```
+docker exec iris-integratedml-monitor-example_irisimlsvr_1 iris session IRIS -U USER '##class(MyMetric.IntegratedMLModelsValidation).Setup()'
+```
+
+Open browser to access the example notebook
+
+```
+http://localhost:8896/notebooks/IntegeratedML-Monitor-Example.ipynb
+```
+Note: use `docker-compose ps` to confirm tf2juyter's ports; make sure right localhost port is used if over SSL tunneling to remotehost)
 
 ## Monitoring your models
 
@@ -69,54 +119,4 @@ You can get more information on System Monitor [here](https://irisdocs.intersyst
 In this work an open dataset with +60K medical appointments is used to train a show/no-show prediction model and simulate a performance issue which can be detected by an application monitor.
 
 The dataset was grabbed from [Kaggle platform](https://www.kaggle.com/) and more information about this dataset could be acquired [here](https://www.kaggle.com/afflores/medical-appointment#).
-
-## Prerequisites
-
-Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
-
-About 6.5GB of free disk space availble.
-
-## Tested environments
-
-This example was tested on Windows 10 and Docker 2.1. All commands was ran in Windows PowerShell.
-
-## Installation
-
-Clone/git pull the repo into any local directory
-
-```
-$ git clone https://github.com/jrpereirajr/iris-integratedml-monitor-example.git
-```
-
-Go to the new directory
-
-```
-$ cd .\iris-integratedml-monitor-example\
-```
-
-Open a Docker terminal in this directory and run:
-
-```
-$ docker-compose build
-```
-
-Run the IRIS container, and Jupyter notebook server images:
-
-```
-$ docker-compose up -d
-```
-
-Start monitor on USER namespace.  
-If you get an error like 'Sign-on inhibited: Startup or Installation in progress', please, wait until IRIS instance complete its startup.
-
-```
-docker exec iris-integratedml-monitor-example_irisimlsvr_1 iris session IRIS -U USER '##class(MyMetric.IntegratedMLModelsValidation).Setup()'
-```
-
-Open browser to access the example notebook
-
-```
-http://localhost:8896/notebooks/IntegeratedML-Monitor-Example.ipynb
-```
-Note: use `docker-compose ps` to confirm tf2juyter's ports; make sure right localhost port is used if over SSL tunneling to remotehost)
 
