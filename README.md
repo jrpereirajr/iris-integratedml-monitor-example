@@ -1,8 +1,6 @@
 # iris-integratedml-monitor-example
 This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML models performance metrics, based on template for IntegratedML.
 
-# *Notice: under development...*
-
 ## Contents
 
 * [Monitoring your models](#monitoring-your-models)
@@ -74,7 +72,7 @@ About 6.5GB of free disk space availble.
 
 ## Tested environments
 
-This example was tested on Windows 10 and Docker 2.1.
+This example was tested on Windows 10 and Docker 2.1. All commands was ran in Windows PowerShell.
 
 ## Installation
 
@@ -96,7 +94,8 @@ Run the IRIS container, and Jupyter notebook server images:
 $ docker-compose up -d
 ```
 
-Start monitor on USER namespace. If you have an error mensagem like 'Sign-on inhibited: Startup or Installation in progress', please,, wait until IRIS instance complete its startup.
+Start monitor on USER namespace.  
+If you get an error like 'Sign-on inhibited: Startup or Installation in progress', please, wait until IRIS instance complete its startup.
 
 ```
 docker exec iris-integratedml-monitor-example_irisimlsvr_1 iris session IRIS -U USER '##class(MyMetric.IntegratedMLModelsValidation).Setup()'
