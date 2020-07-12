@@ -67,7 +67,7 @@ Method UnRegisterMe()
 End
 }
 
-ClassMethod Test(pClassName As %String)
+ClassMethod GetSamples(pClassName As %String)
 {
 	Set mclass=pClassName
 	Set col=##class(%Monitor.SampleAgent).%New(mclass)
