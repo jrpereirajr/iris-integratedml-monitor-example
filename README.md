@@ -1,6 +1,10 @@
 # iris-integratedml-monitor-example
 This is an example of extending %Monitor.Adaptor to monitor IRIS IntegrateML models performance metrics, based on template for IntegratedML.
 
+Please, checout these articles written based on this work:
+* [Why is COVID-19 also dangerous for Machine Learning? (Part I)](https://community.intersystems.com/post/why-covid-19-also-dangerous-machine-learning-part-i)
+* [Why is COVID-19 also dangerous for Machine Learning? (Part II)](https://community.intersystems.com/post/why-covid-19-also-dangerous-machine-learning-part-ii)
+
 ## Contents
 
 * [Prerequisites](#prerequisites)
