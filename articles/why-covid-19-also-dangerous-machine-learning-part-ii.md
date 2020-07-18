@@ -1,6 +1,8 @@
 # Why is COVID-19 also dangerous for Machine Learning? (Part II)
 
-Following up the [previous part](https://community.intersystems.com/post/why-covid-19-also-dangerous-machine-learning-part-i), it's time to take advantages for IntegratedML VALIDATION MODEL statement, to provide information in order to monitor your ML models.
+Following up the [previous part](https://community.intersystems.com/post/why-covid-19-also-dangerous-machine-learning-part-i), it's time to take advantages for IntegratedML VALIDATION MODEL statement, to provide information in order to monitor your ML models. You can watch it in action [here](https://www.youtube.com/watch?v=q9ORM32zPjs)
+
+The code presented here was derived from examples provided by either [InterSystems IntegragedML Template](https://openexchange.intersystems.com/package/integratedml-demo-template) or [IRIS documentation](https://irisdocs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=GCM_healthmon), my contribution was mainly mashing up such codes. It's a simple example intended to be a start for discussions and future works.
 
 Note: The code presented here is for explanation purpose only. If you want to try it, I developed an example application - [iris-integratedml-monitor-example](https://openexchange.intersystems.com/package/iris-integratedml-monitor-example), which is competing in the InterSystems IRIS AI Contest. Please, after read this article, you can check it out and, if you like it, [vote for me](https://openexchange.intersystems.com/contest/current)! :)
 
@@ -26,7 +28,7 @@ Fortunately, IRIS provide us with both of such required features.
 
 As we saw in [previous part](https://community.intersystems.com/post/why-covid-19-also-dangerous-machine-learning-part-i), IntegratedML provides the VALIDATE MODEL statement for calculate the following performance parameters:
 
-* Accuracy: how good your model is (values close to 1 means high correct  answer rate)
+* Accuracy: how good your model is (values close to 1 means high correct  answer rates)
 * Precision: how good your model deal with false positives (values close to 1 means high **no** false positives rates)
 * Recall: how good your model deal with false negatives (values close to 1 means high **no** false negatives rates)
 * F-Measure: another way to measure accuracy, used when accuracy are not performing well (values close to 1 means high correct  answer rate)
@@ -39,7 +41,7 @@ The cool thing is that each time you call VALIDATE MODEL, IntegrateML stores its
 
 InterSystems IRIS provides the System Monitor framework to deal with monitoring task. It also let you to define custom rules in order to trigger notifications based on predicates applied on such metrics. 
 
-By default, a bunch of metrics for disc, memory, network etc are provided. Furthermore, System Monitor also let you to extend monitors to cover a endless possibilities. Such custom monitor are called Application Monitor in System Monitor terminology.
+By default, a bunch of metrics for disc, memory, process, network etc are provided. Furthermore, System Monitor also let you to extend monitors to cover a endless possibilities. Such custom monitor are called Application Monitor in System Monitor terminology.
 
 You can get more information on System Monitor [here](https://irisdocs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=GCM_healthmon).
 
@@ -70,7 +72,7 @@ Method GetSample() As %Status
 }
 ```
 
-System monitors issues regular calls to monitor classes in order to get a set of metrics called samples. Such samples could be just monitored or used to check if alert rules must be raised. You define the structure of such samples by defining standard non-internal properties in montior class. It's important to note here that you must specify, in parameter INDEX,  one of those properties to act like a primary key of each sample - otherwise a duplicate key error will be thrown.
+System monitors issues regular calls to monitor classes in order to get a set of metrics called samples. Such samples could be just monitored or used to check if alert rules must be raised. You define the structure of such samples by defining standard non-internal properties in monitior class. It's important to note here that you must specify, in parameter INDEX,  one of those properties to act like a primary key of each sample - otherwise a duplicate key error will be thrown.
 
 ```
 Class MyMetric.IntegratedMLModelsValidation1 Extends %Monitor.Adaptor
@@ -165,13 +167,13 @@ Method GetSample() As %Status
 }
 ```
 
-After compiling the monitor class, you need to restart System Monitor in order to system realize that a new monitor was created and ready to use. You could use both ^%SYSMONMGR routine or %SYS.Monitor class to do this.
+After compiling the monitor class, you need to restart System Monitor in order to system realize that a new monitor was created and is ready to use. You could use both ^%SYSMONMGR routine or %SYS.Monitor class to do this.
 
 # A simple use case
 
 Ok, so far we have the necessary tools to collect, monitor and issue alerts on ML performance metrics. Now, it's time to define a custom alert rule and simulate a scenario which a deployed ML model starts to get your performance negatively affected.
 
-First, we must configure an email alert and its trigger rule. This could be done using ^%SYSMONMGR routine. However, in order to make thing easier, I create a setup method which get all e-mail configuration and alert rule. You need to replace values between &lt;&gt; with your e-mail server and account parameters.
+First, we must configure an email alert and its trigger rule. This could be done using ^%SYSMONMGR routine. However, in order to make things easier, I created a setup method which set all e-mail configuration and alert rule. You need to replace values between &lt;&gt; with your e-mail server and account parameters.
 
 ```
 ClassMethod NotificationSetup()
@@ -217,7 +219,7 @@ ClassMethod NotificationSetup()
 
 In previous method, an alert will be issued after monitor get accuracy values less than 90%.
 
-Now that our alert rule is setup, let's create, train and validate a show/no-show predcition model with the first 500 records and validate it througth first 600 records, acquiring 90% of accuracy. 
+Now that our alert rule is setup, let's create, train and validate a show/no-show prediction model with the first 500 records and validate it through first 600 records.
 
 Note: *seed* parameter is just for guarantee reproducibility (i.e., no random values) and normally must be avoid in production.
 
@@ -272,7 +274,7 @@ SELECT PREDICT(AppointmentsPredection) As Predicted, Show FROM MedicalAppointmen
 | 499 | 1         | True  |
 ```
 
-Then, let's simulate adding new 200 records (totalling 800 records) to the model in such way its accuracy is decreased to 87%.
+Then, let's simulate adding 200 new records (totalling 800 records) to the model in such way its accuracy is decreased to 87%.
 
 ```
 -- Calculate performace metrics of model using first 800 records
@@ -287,7 +289,7 @@ SELECT * FROM INFORMATION_SCHEMA.ML_VALIDATION_METRICS WHERE MODEL_NAME = '%s'
 | AppointmentsPredection22 | 0.87     | 0.93      | 0.98      | 0.88   |
 ```
 
-As we setup early a rule to issue an e-mail notification if accuray is less than 90%, System Monitor realize that it's time to trigger such alert to the e-mail(s) account(s) related to alert.
+As we setup early a rule to issue an e-mail notification if accuracy is less than 90%, System Monitor realize that it's time to trigger such alert to related e-mail(s) account(s).
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jrpereirajr/iris-integratedml-monitor-example/master/model-validation-2.png" width="600" title="docker environment topology after installation">
@@ -311,5 +313,5 @@ Note that, as System Monitor will regularly runs Initialize and GetSample method
 
 As noticed by [Benjamin Deboe](https://github.com/jrpereirajr/iris-integratedml-monitor-example/issues/1), IRIS introduces a new way to customize your monitoring task - the [SAM tool](https://docs.intersystems.com/sam/csp/docbook/Doc.View.cls?KEY=ASAM). My first impressions was very positives, SAM is integrated with market standard monitoring technologies like Grafana and Prometheus. So, why not go ahead and test how to improve this work with such new features? But this is material for a future work.... :)
 
-Well, this is it... I hope this could be useful for you in some way.
+Well, this is it! I hope this could be useful for you in some way.
 See you!
