@@ -92,4 +92,52 @@ ClassMethod GetSamples(pClassName As %String)
 	Return log
 }
 
+ClassMethod NotificationSetup()
+{
+	// Set E-mail parameters
+	Set sender = "<your e-mail address>"
+	Set password = "<your e-mail password>"
+	Set server = "<SMTP server>"
+	Set port = "<SMTP server port>"
+	Set sslConfig = "default"
+	Set useTLS = 1
+	Set recipients = $LB(<comma-separated receivers for alerts>)
+	Do ##class(%Monitor.Manager).AppEmailSender(sender)
+	Do ##class(%Monitor.Manager).AppSmtpServer(server, port, sslConfig, useTLS)
+	Do ##class(%Monitor.Manager).AppSmtpUserName(sender)
+	Do ##class(%Monitor.Manager).AppSmtpPassword(password)
+	Do ##class(%Monitor.Manager).AppRecipients(recipients)
+	
+	// E-mail as default notification method
+	Do ##class(%Monitor.Manager).AppNotify(1)
+	
+	// Enable e-mail notifications
+	Do ##class(%Monitor.Manager).AppEnableEmail(1)
+	
+	// Check metric every 10s
+	Set time = 10
+	Do ##class(%SYS.Monitor).Interval(time)
+	Do ##class(%Monitor.Manager).AppInterval(time)
+	
+	Set name  = "perf-model-appointments-prediction"
+	Set appname = $namespace
+	Set action = 1
+	Set nmethod = ""
+	Set nclass = ""
+	Set mclass = "MyMetric.IntegratedMLModelsValidation"
+	Set prop = "ModelMetricAccuracy"
+	Set expr = "%1 < .9"
+	Set once = 0
+	Set evalmethod = ""
+	// Delete previous alert if exists
+	Set exists = ##class(%Monitor.Alert).GetId(name,.id)
+	Set:(exists) st = ##class(%Monitor.Alert).Delete(name, appname)
+	// Create an alert
+	Set st = ##class(%Monitor.Alert).Create(name, appname, action, nmethod, nclass, mclass, prop, expr, once, evalmethod)
+	$$$THROWONERROR(st, st)
+	
+	// Restart monitor
+	Do ##class(MyMetric.Install).RestartMonitor()
+}
+
 }
